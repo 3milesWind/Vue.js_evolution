@@ -1,51 +1,23 @@
 <template>
-  <!-- <h2 v-for="name in names" v-bind:key="name">{{ name }}</h2> -->
-  <h2 v-for="(name,index) in names" v-bind:key="name">{{ index }} {{ name }}</h2>
-  <h2 v-for="name in fullName" :key="name.first">{{ name.first }} {{name.last}}</h2>
-  
-  <div v-for="actor in actors" :key="actor.name">
-    <h2>{{ actor.name}}</h2>
-    <h3 v-for="movie in actor.movies" :key="movie">{{movie}}</h3>
-  </div>
-
-  <h2 v-for="(value, key, index) in myInfor" :key="value">{{index}} {{key}} {{ value}}</h2>
-  
-  <template v-for="name in names" :key="name">
-    <h2 v-if="name === 'Bruce'"> {{name}}</h2>
-  </template>
-
-<template v-for="name in names" :key="name"> 
-  <h2>{{name}}</h2>
-  <hr />
+  <!-- <Greet name = 'Burce'/>
+  <Greet name = 'Clark'/>
+  <Greet :name = 'name'/> -->
+  <Article id="my-id-attribute" title='good' :like='50' :isPublished="true"/>
 </template>
 
-</template>
 <script>
+// import Greet from './components/Greet.vue'
+import Article from './components/Article.vue'
 export default {
   name: 'App',
+  components: {
+    // Greet,
+    Article,
+  },
   data() {
     return {
-      names: ['Bruce', 'Clark', 'Diana'],
-      fullName:[
-        {first: 'Bruce', last: 'Wayne'},
-        {first: 'Bruce2', last: 'Wayne2'},
-        {first: 'Bruce3', last: 'Wayne3'},
-      ],
-      actors:[
-        {
-          name: "jeffrey",
-          movies: ['Batman', 'The Prestige'],
-        },
-        {
-          name:"Di caprio",
-          movies: ['Titanic', 'Inception']
-        }
-      ],
-      myInfor:{
-          name: 'Vishwas',
-          channel: 'CodeVolution'
-      }
-    };
+      name: 'batman'
+    }
   }
 }
 </script>
@@ -59,5 +31,4 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-
 </style>
