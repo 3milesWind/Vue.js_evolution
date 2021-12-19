@@ -1,5 +1,7 @@
 # Vue.js_evolution
 
+[toc]
+
 ## Create a simple project
 
 1. yarn global add @vue/cli
@@ -12,7 +14,7 @@
 
 ## Project Structure
 
-1. A *.Vue file is a custom file formatr that uses HTML-Like syntax to describe a portion of the UI
+1. A *.Vue file is a custom file format that uses HTML-Like syntax to describe a portion of the UI
 
 2. Each *.Vue file consists of tree types of top-level language blocks
    
@@ -50,7 +52,7 @@ export default {
 </script>
 ```
 
-* Two ways to blinding Textjavascript
+* Two ways to blinding Text
   
   ```javascript
   <div>{{greet}} {{ name }}</div> // recommanded
@@ -89,7 +91,7 @@ export default {
  <button disabled>Bind</button>
 ```
 
-Through the `v-bind` to add some arrtibutes to the html
+Through the `v-bind` to add some attributes to the html
 
 ## Binding Classes
 
@@ -269,13 +271,13 @@ what is different between `v-if` and `v-show`
 
 * When used with the v=for directive, the key attribute should always have a unique value in each iterator 
 
-* without keys, Vue uses an algorithm that minimuzes element movement and tries to patch/reuse elements of the same type in place as much as possible 
+* without keys, Vue uses an algorithm that minimizes element movement and tries to patch/reuse elements of the same type in place as much as possible 
 
-* Not using keys is only suitable when your list render output does not repy on temporary Dom state or child component state
+* Not using keys is only suitable when your list render output does not rely on temporary Dom state or child component state
 
-* Althgough the default behavior of patching is more efficient, it can lead to problems
+* Although the default behavior of patching is more efficient, it can lead to problems
 
-* a typpical value to provide to the key attribute is the id property is an Object. But any unique property will do as long as its not non-primitive value like Object or arrays
+* a typical value to provide to the key attribute is the id property is an Object. But any unique property will do as long as its not non-primitive value like Object or arrays
 
 #### V-for Directive
 
@@ -317,7 +319,7 @@ what is different between `v-if` and `v-show`
    </template>
    ```
 
-5. Contional List Rendering
+5. conditional List Rendering
    
    note that `v-for`can not write with `v-if` in the same line. `v-if`has the higher priority
    
@@ -405,7 +407,7 @@ ShortHand syntax
     </div>
 ```
 
-#### Textareas
+#### Text-areas
 
 ```javascript
  <div>
@@ -510,7 +512,7 @@ export default {
 
 a suffix you can add to either the v-on directive or the v-model directive to add some functionality inline within the template
 
-Helps you wirte cleaner code
+Helps you write cleaner code
 
 1. `ignore the all empty sapce`:         `.trim`
 
@@ -534,13 +536,13 @@ properties that can be bound to the template like data properties
 
 They are used for composing new data from existing sources
 
-They are highly performant as they are cached calcualations which only update when their dependencies change 
+They are highly performant as they are cached calculations which only update when their dependencies change 
 
 ### Use Computed :
 
 1. You need to compose new data from existing data source
 
-2. You need to reduce the length of a varibale 
+2. You need to reduce the length of a variable 
 
 ```javascript
 <h2>
@@ -566,7 +568,7 @@ Simple useage: add button:
 
 ### Computed vs Methods
 
-methods don't know if the values used in the function changed so **they need to run everytime to check**. computed properties know if the values used in the function changed so **they don't need to run everytime to check, only once!**
+methods don't know if the values used in the function changed so **they need to run every-time to check**. computed properties know if the values used in the function changed so **they don't need to run every-time to check, only once!**
 
 For example: input box for methods: if we input `life`, the method will generate 4 times.
 
@@ -582,7 +584,7 @@ Two ways to display `item greater than 200`
   </template>
 ```
 
-Even though it works well, but it recommand to use computed method. Save it in the cache
+Even though it works well, but it recommend to use computed method. Save it in the cache
 
 ```javascript
   computed:{
@@ -677,7 +679,7 @@ export default {
 
 getting deeper: watcher execute only the data has changed.  After the re-fresh the api would not call. 
 
-Step1: set the wacther run after the page re-fresh
+Step1: set the watcher run after the page re-fresh
 
 ```javascript
 watch:{
@@ -692,7 +694,7 @@ watch:{
   }
 ```
 
-Setp2: wacther would not wacth for changes in deeply nested properties by default
+Step2: watcher would not watch for changes in deeply nested properties by default
 
 Object and Array
 
@@ -757,7 +759,7 @@ export default {
 
 ## Components
 
-Component conatins:  template, script, style
+Component contains:  template, script, style
 
 ```javascript
 // html
@@ -848,7 +850,7 @@ pass parameter by type
 
 ```
 
-Define the prop tyeps and Validation
+Define the prop types and Validation
 
 ```javascript
 <script>
