@@ -1,6 +1,6 @@
 # Vue.js_evolution
 
-[toc]
+[TOC]
 
 ## Create a simple project
 
@@ -560,7 +560,7 @@ computed:{
   }
 ```
 
-Simple useage: add button:
+Simple use-age: add button:
 
 ```javascript
 <button @click="items.push({id: 4, title: 'keyboard', price: 50})">Add</button>
@@ -630,7 +630,6 @@ methods: {
     }
 }
 </script>
-
 ```
 
 ## Watchers
@@ -819,7 +818,6 @@ export default {
   }
 }
 </script>
-
 ```
 
 Children component:
@@ -847,7 +845,6 @@ pass parameter by type
   // String do not need to this.
   <Article title="good" :like='50' :isPublished="true"/>
 </template>
-
 ```
 
 Define the prop types and Validation
@@ -905,5 +902,613 @@ For example: id, class, and style attributes
         inheritAttrs: false   // avoid the id class add to root
     }
 </script>
+```
+
+### Provide/Inject
+
+<img src="file:///var/folders/mw/dwlqnlkj4_bbq4q_053kczp80000gn/T/TemporaryItems/NSIRD_screencaptureui_Y5C3Js/Screen%20Shot%202021-12-19%20at%209.48.03%20AM.png" title="" alt="Screen Shot 2021-12-19 at 9.48.03 AM.png" width="496">
+
+The two APIs provide a way to pass data through the component tree without having to pass down props manually at every level
+
+1. Provide the value in the App component
+
+2. Inject the value in the component F
+
+```javascript
+// Component C
+// To use the variables in the parent
+// the the set `provide` as method
+<script>
+import ComponentE from './ComponentE.vue'
+    export default {
+        name: 'ComponentC',
+        components:{
+            ComponentE
+        },
+        data() {
+            return {
+                name: 'Jeffrey'
+            }
+        },
+        // provide the value to children 
+        provide() {
+            return {
+                userName: this.name
+            }
+        }
+    }
+</script>
+```
+
+Children Component
+
+```javascript
+<script>
+    export default {
+        name: 'ComponentF',
+        inject: ['userName']
+    }
+</script>
+```
+
+### Component Events: Child talks to parent
+
+<img src="file:///var/folders/mw/dwlqnlkj4_bbq4q_053kczp80000gn/T/TemporaryItems/NSIRD_screencaptureui_VkicFu/Screen%20Shot%202021-12-19%20at%2010.07.35%20AM.png" title="" alt="Screen Shot 2021-12-19 at 10.07.35 AM.png" width="475">
+
+`emits`: send the props to parent
+
+```javascript
+<template>
+    <div>
+        <h2>This is pop up component</h2>
+        // the second parameter as the data 
+        // first parameter as event name
+        <button @click="$emit('close', 'Jeffrey')">Colose popup</button>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: 'PopUp',
+        emits: ['close'] 
+    }
+    
+</script>
+```
+
+```javascript
+<template>
+  <button @click="isPopUp = true">PopUp</button>
+  <PopUp v-show="isPopUp" @close="isPopUp = false"/>
+</template>
+
+<script>
+import PopUp from './components/PopUp.vue'
+export default {
+  name: 'App',
+  components: {
+    PopUp,
+  },
+  data() {
+    return {
+      isPopUp: false,
+    }
+  }
+}
+</script>
+```
+
+Therefore, we can call the custom event in the parent component
+
+**How to pass data into the parent component**
+
+`in the parent create a method`
+
+```javascript
+<template>
+  <button @click="isPopUp = true">PopUp</button>
+  // create the method to handle the data
+  <PopUp v-show="isPopUp" @close="ClosedPopUp"/>
+</template>
+
+<script>
+import PopUp from './components/PopUp.vue'
+export default {
+  name: 'App',
+  components: {
+    PopUp,
+  },
+  data() {
+    return {
+      isPopUp: false,
+    }
+  },
+  methods: {
+     ClosedPopUp(values){
+        this.isPopUp = false,
+        console.log(values)
+     }
+  }
+}
+```
+
+### Validating Emitted Events
+
+```javascript
+<template>
+    <div>
+        <h2>This is pop up component</h2>
+        <input type="text" v-model="name"/>
+        <button @click="$emit('close', name)">Colose popup</button>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: 'PopUp',
+       // do some validation on the emits
+        emits: {
+            // function 
+            close: (name) => {
+                if (!name) return false
+                else return true
+            }
+        },
+        data(){
+            return {
+                name: '',
+            }
+        }
+    }
+    
+</script>
+```
+
+### Components and v-model
+
+it will `v-model` the variable from component event
+
+```javascript
+<template>
+    <div>
+        <input type='text' :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"/>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: 'Input',
+        // recieve the props
+        props: {
+            modelValue: String
+        }
+    }
+</script>
 
 ```
+
+## Slots
+
+Props allow you to re-use components by passing in different data 
+
+Although props are great for re-usability, we do have a strict parent-child relationship
+
+the children will always be in control of the HTML content and the parent can only pass in different data values
+
+Slots on the other hand are more powerful
+
+They allow you to re-use a component
+
+they allow the parent component to control the content inside the child content
+
+Slots allow a parent component to embed any content in a child component including HTML elements
+
+```javascript
+<template>
+    <div>
+        <slot>Default Content</slot>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: 'Card'
+    }
+</script>
+```
+
+Parent component can simply put any content by `<Card></Card>`
+
+```javascript
+<template>
+  <Card>Any content can put in slot</Card>
+</template>
+
+```
+
+### named Slot : multiple slots
+
+```javascript
+<template>
+    <div>
+        <div>
+            <slot name = "header"></slot>
+        </div>
+        <div>
+            <slot ></slot>
+        </div>
+        <div>
+            <slot name = "footer"></slot>
+        </div>
+    </div>
+</template>
+```
+
+Parent Component:
+
+```javascript
+<template>
+  <Card>
+    <template v-slot:header> header content</template>
+    <template v-slot:default> slot without name content</template>
+    <template v-slot:footer> footer content</template>
+  </Card>
+</template>
+
+```
+
+### Slots props
+
+ Using `slots` to get `data` from children component 
+
+```javascript
+<template>
+    <div>
+        <h3 v-for="name in names" :key="name.firstName">
+            <slot :firstName="name.firstName" :lastName="name.lastName"></slot>
+        </h3>
+    </div>
+</template>
+```
+
+```javascript
+<template>
+  <NameList>
+    <template v-slot:default="slotProps">
+      {{slotProps.firstName}} {{slotProps.lastName}}
+    </template>
+  </NameList>
+</template>
+```
+
+## Component  Styles
+
+1.  By default, a component  styles are applied globally in the component tree
+
+2.  Parent style render after the children style 
+
+3.  add`scoped`  attribute ensures a component's CSS will apply only to it's own HTML
+
+4. "With scoped, the parent component's style will not leak into child components. However, a child component's root node will be affected by both  the parent's scoped CSS and the child's scoped CSS. This is by design so that the parent can style the child root element for layout purpose"
+
+5. When using slots, the parent components styles are applied and not the child component styles even though the content is embedded inside the child component
+
+## Dynamic Components
+
+Select corresponding  component
+
+```javascript
+<template>
+  <button @click="activeTab = 'TabA'">Tab A</button>
+  <button @click="activeTab = 'TabB'">Tab B</button>
+  <button @click="activeTab = 'TabC'">Tab C</button>
+  // after click to pick one 
+  <component :is="activeTab" />
+</template>
+```
+
+### Keeping Dynamic component Alive
+
+* to keep status of in-active component
+
+```javascript
+<keep-alive> 
+ <component :is="activeTab" />
+</keep-alive> 
+```
+
+## Teleport Component
+
+use to create model 
+
+## Vue and HTTP
+
+`yarn add axios`
+
+Get request from axios
+
+```javascript
+<template>
+    <div>   
+        <button @click="getPosts">Load Posts</button>
+        <div v-for="post in posts" :key="post.id">
+            <h3>{{post.id}} {{post.title}}</h3>
+            <p>{{post.bod}}</p>
+            <hr/>
+        </div>
+    </div>
+</template>
+
+<script>
+import axios from 'axios'
+    export default {
+        name:'PostList',
+        data(){
+            return {
+                posts: [],
+            }
+        },
+        methods:{
+            getPosts() {
+                axios.get('https://jsonplaceholder.typicode.com/posts')
+                .then((reponse) => {
+                    console.log(reponse.data)
+                    this.posts = reponse.data
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+        }
+    }
+</script>
+
+
+```
+
+post request from axios
+
+```javascript
+<template>
+    <div>
+        <form @submit.prevent="createPost">
+            <div>
+                <label for="userId">Post user id</label>
+                <input type="text" id="userId" v-model="fromData.userId"/>
+            </div>
+             <div>
+                <label for="title">Post user id</label>
+                <input type="text" id="title" v-model="fromData.title"/>
+            </div>
+             <div>
+                <label for="body">Post user id</label>
+                <input type="text" id="body" v-model="fromData.body"/>
+            </div>
+            <button>Create Post</button>
+        </form>
+    </div>
+</template>
+
+<script>
+import axios from 'axios'
+    export default {
+        name:'CreatePost',
+        data(){
+            return{
+                fromData: {
+                    userId: '',
+                    title:'',
+                    body: ''
+                }
+            }
+        },
+        methods: {
+            createPost(){
+                axios.post('https://jsonplaceholder.typicode.com/posts', this.formData)
+                .then(Response => console.log(Response))
+                .catch(error => console.log(error))
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>
+```
+
+## Component Lifecycle Hooks
+
+A vue component can go through 4 phases
+
+1. Creation
+
+2. Mounting
+
+3. Updating
+
+4. Unmounting
+
+Lifecycle hooks are methods that allow us to hook into or trap into there different phases in the lifecycle of a component and execute some code
+
+![Screen Shot 2021-12-20 at 11.28.28 AM.png](/var/folders/mw/dwlqnlkj4_bbq4q_053kczp80000gn/T/TemporaryItems/NSIRD_screencaptureui_45AdYT/Screen%20Shot%202021-12-20%20at%2011.28.28%20AM.png)
+
+## Template Refs
+
+after the page load, it will focus on the input box
+
+```javascript
+<template>
+    <div>
+        <input type="text" ref="inputRef"/>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: 'TemplateRef',
+        mounted(){
+           this.$refs.inputRef.focus()
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>
+```
+
+## Reusability with Mixins
+
+1. Create a `Minxins` folder
+
+2. Create file with `.js`  javaScript file
+
+3. create `script's data() and methods`
+
+4. import it into the component 
+
+5. `mixinx:[import name]`
+
+Component's variable can overwrite the variable in the `mixinx`
+
+
+
+## Composition Api
+
+The composition Api is a feature in Vue 3 which gives us another way to write our components
+
+Options API - data(), computed properties, methods, watchers & lifecycle hooks
+
+### Why Composition API
+
+1. Vue projects become hard to manage as they grew in size and complexity
+
+2. Re-using logic across components becomes difficult
+
+The composition API allows us to encapsulate one piece of functionality so that you can use it in different components throughout the application
+
+#### ### Example Code
+
+#### Replacing data with ref
+
+hightLights: 
+
+1. Refs returns a reactive and mutable object  that serves as a reactive reference to internal value
+   
+   Use ref() for primitive data types like string, boolean, number, null, undefined, symbol And use reactive() for non-primitive data types like array, object.
+
+2. `toRefs`: return the reactive objects
+
+#### Replacing methods and examples
+
+#### Composition with V-model example
+
+#### Replacing computed Method example
+
+#### Replacing watch example
+
+#### Replacing provide/Inject
+
+[Vue JS 3 Tutorial - 60 - Replacing Provide/Inject - YouTube](https://www.youtube.com/watch?v=VS7Qy0TYtN0&list=PLC3y8-rFHvwgeQIfSDtEGVvvSEPDkL_1f&index=60)
+
+
+
+```javascript
+<template>
+    <div>
+        <h2>{{ name }}</h2>
+        <input type="text" v-model="name"/>
+        <button @click="IncreaseCount">{{ count }}</button>
+        <h2>{{first}} {{last}}</h2>
+        <button @click="changeName">change name</button>
+        
+        <h2>{{ computedFullName}}</h2>
+    </div>
+</template>
+
+<script>
+import {ref, reactive, toRefs, computed, watch} from 'vue'
+    export default {
+        name:'Methods',
+        setup(){
+            const count = ref(0)
+            const name = ref('jeffrey')
+            const state = reactive({
+                first: 'Burce',
+                last: 'Wayne'
+            })
+            // it also can be array, either one change, do the inspection
+            watch([name], (newValue, oldValue)  =>  {
+                console.log('newValue',newValue[0])
+                console.log('oldValue',oldValue[0])
+            },{
+                immediate: true
+            })
+            
+            // make it works on the reactive object
+            watch(() => {
+                return state.first
+            }, (newValue, oldValue)  =>  {
+                console.log('newValue',newValue)
+                console.log('oldValue',oldValue)
+            },{
+                immediate: true,
+                deep: true  // when the object has nested infomation
+            })
+            
+            //  reactive object -> single 
+            watch(() => {
+                return {...state}
+            }, (newValue, oldValue)  =>  {
+                console.log('newValue',newValue)
+                console.log('oldValue',oldValue)
+            },{
+                immediate: true
+            })
+            
+            const computedFullName = computed(function() {
+                return `${state.first} ${state.last}`
+            })
+            
+            function IncreaseCount() {
+                count.value ++;
+            }
+            function changeName(){
+                state.first = 'Clark'
+                state.last  = 'Kent'
+            }
+            
+            return {
+                count,
+                name,
+                IncreaseCount,
+                ...toRefs(state),
+                changeName,
+                computedFullName
+            }
+        },
+        data(){
+            return {
+            }
+        }
+    }
+    
+</script>
+
+<style scoped>
+
+</style>
+```
+
+```javascript
+//first argment: props
+// second argment: context
+setup(props, context){
+    
+}
+props: [['first']],
+emits: ['callheros']
+```
+
+[Vue JS 3 Tutorial - 66 - Deploying Vue Applications - YouTube](https://www.youtube.com/watch?v=qduayAPJK9A&list=PLC3y8-rFHvwgeQIfSDtEGVvvSEPDkL_1f&index=66)
